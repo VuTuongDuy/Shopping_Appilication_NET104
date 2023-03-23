@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Shopping_Appilication.Models.Image>
+
+@{
+    ViewData["Title"] = "GetAllImage";
+}
+
+<h1>GetAllImage</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IdImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image3)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image4)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdImage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Image1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Image2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Image3)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Image4)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {  id=item.IdImage  }) |
+                @Html.ActionLink("Details", "Details", new {  id=item.IdImage  }) |
+                @Html.ActionLink("Delete", "Delete", new {  id=item.IdImage  })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
