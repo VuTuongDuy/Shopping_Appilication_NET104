@@ -27,6 +27,8 @@ namespace Shopping_Appilication.Controllers
 
         public IActionResult Privacy()
         {
+            string content = HttpContext.Session.GetString("Message");//Lấy data từ ssesion
+            ViewData["SsesionData"] = content;
             return View();
         }
         public IActionResult Product()
@@ -39,7 +41,8 @@ namespace Shopping_Appilication.Controllers
         }
         public IActionResult Show()
         {
-            Product product = new Product() { 
+            Product product = new Product()
+            {
                 Id = Guid.NewGuid(),
                 Name = "Nike Air 5",
                 AvailableQuantity = 1,
@@ -112,7 +115,7 @@ namespace Shopping_Appilication.Controllers
         public IActionResult Edit(Product p) // Thực hiện việc Tạo mới
         {
             Product product = productServices.GetProductById(p.Id);
-            if(p.Price >= product.Price)
+            if (p.Price > product.Price)
             {
                 TempData["Message"] = "Gia moi phai lon hon gia cu";
                 return RedirectToAction("ShowListProduct1");
@@ -151,8 +154,51 @@ namespace Shopping_Appilication.Controllers
             }
             return View(lstProduct);
         }
+        public IActionResult Search(string name)
+        {
+            try
+            {
+                var products = productServices.GetProductsByName(name);
+                foreach (var product in products)
+                {
+                    string imageUrl = imageServices.GetImageUrl((Guid)product.IdImage);
+                    product.ImageUrl = imageUrl;
+                }
+                ViewBag.Name = name;
+                return View(products);
+            }
+            catch (Exception ex)
+            {
+                return Content(ex.InnerException.Message);
+            }
+
+        }
         public IActionResult Admin()
         {
+            return View();
+        }
+        public IActionResult TransferData() // Đẩy dữ liệu qua các View
+        {
+            // Để truyền đc data sang view thì ngoài cách trực tiếp 1 object model ta có thể sử dụng các cách sau:
+            /* 
+             * 1. Sử dụng ViewBag: Dữ liệu trong ViewBag là dl dynamic. Không cần khởi tạo thành phần ViewBag mà đặt tên luôn
+             * 
+             * */
+            int[] marks = { 1, 2, 3, 4, 5, 6, 7 };
+            List<string> characterName = new List<string>() { "Paris", "Tokyo", "Berlin", "Moskow", "Stockhoml", "Berg", "Rome", "Nairobi", "Seoul" };
+            ViewBag.Marks = marks;// Gán dữ liệu vào ViewBag
+            ViewBag.Marks1 = characterName;// Gán dữ liệu vào ViewBag
+            /* 
+             * Sử dụng ViewData: Data sẽ đc truyền tải dưới dạng Key-Value nhưng dl lại ở dạng Generic
+             */
+            ViewData["name"] = characterName;
+            /*
+             * Sử dụng Session (Phiên làm việc), cơ chế key - value
+             */
+            string mess = "Hungry, Crazy";
+            HttpContext.Session.SetString("Message", mess);//Truyền data vào ssesion
+            string content = HttpContext.Session.GetString("Message");//Lấy data từ ssesion
+            ViewData["SsesionData"] = content;
             return View();
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -53,7 +53,7 @@ namespace Shopping_Appilication.Services
 
         public List<Product> GetProductsByName(string name)
         {
-            return _dbContext.Products.Where(c => c.Name.Contains(name)).ToList();
+            return _dbContext.Products.Where(c => c.Name.ToLower().Contains(name.ToLower())).ToList();
         }
 
         public bool UpdateProduct(Product product)

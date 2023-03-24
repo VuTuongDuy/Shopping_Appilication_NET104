@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Shopping_Appilication.IServices;
 using Shopping_Appilication.Models;
 using Shopping_Appilication.Services;
@@ -6,7 +7,7 @@ using System.Diagnostics;
 
 namespace Shopping_Appilication.Controllers
 {
-    public class SizeController:Controller
+    public class SizeController : Controller
     {
         private readonly ILogger<SizeController> _logger;
         private readonly ISizeServices sizeServices;
@@ -49,6 +50,7 @@ namespace Shopping_Appilication.Controllers
 
         public IActionResult Edit(Size size) // Thực hiện việc Tạo mới
         {
+
             if (sizeServices.UpdateSize(size))
             {
                 return RedirectToAction("GetAllSize");

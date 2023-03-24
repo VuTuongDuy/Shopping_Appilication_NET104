@@ -1,6 +1,6 @@
-﻿@model IEnumerable<Shopping_Appilication.Models.Product>
+﻿@model IEnumerable<Product>
 @{
-	ViewData["Title"] = "Sản phẩm";
+	ViewData["Title"] = "Search";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -15,6 +15,7 @@
 	<link href="https://unpkg.com/tailwindcss@0.3.0/dist/tailwind.min.css" rel="stylesheet">
 	<link rel="stylesheet" href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css'>
 	<link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 	<!-- Google Fonts Roboto -->
@@ -206,25 +207,36 @@
 		</div>
 	</section>
 	<!-- products section -->
-		<section id="products" style="float: right">
-			<div class="container mt-4 d-flex justify-content-center" style="padding-top: 15px;">
-				<div class="row g-0">
-				@foreach (var item in Model){
-					<div class="col-sm-6 col-md-4" style="padding-top: 5px;">
-						<div class="cards">
-							<div class="first bg-white p-4 text-center">
-								<a href="@Url.Action("Details", "Home", new { id = item.Id })"><img src="@item.ImageUrl" style="width: 100%;"></a>
-								<h5 style="padding-top: 5px;">@Html.DisplayFor(modelItem => item.Name)</h5>
-								<p class="line1">@Html.DisplayFor(modelItem => item.Description)</p>
-								<p style="font-size: 13px;">@Html.DisplayFor(modelItem => item.Price)</p>
-								<button class="btnok">Thêm vào giỏ hàng</button>
+	<div id="product-list">
+		<!-- Nội dung sản phẩm sẽ được tải lên tại đây -->
+		@if (Model.Count() == 0)
+		{
+			<h2 style="text-align:center; padding-top:50px;">We could not find anything for "@ViewBag.Name"</h2>
+		}
+		else
+		{
+			<section id="products" style="float: right">
+				<div class="container mt-4 d-flex justify-content-center" style="padding-top: 15px;">
+					<div class="row g-0">
+						@foreach (var product in Model)
+						{
+							<div class="col-sm-6 col-md-4" style="padding-top: 5px;">
+								<div class="cards">
+									<div class="first bg-white p-4 text-center">
+										<a href="@Url.Action("Details", "Home", new { id = product.Id })"><img src="@product.ImageUrl" style="width: 100%;"></a>
+										<h5 style="padding-top: 5px;">@Html.DisplayFor(modelItem => product.Name)</h5>
+										<p class="line1">@Html.DisplayFor(modelItem => product.Description)</p>
+										<p style="font-size: 13px;">@Html.DisplayFor(modelItem => product.Price)</p>
+										<button class="btnok">Thêm vào giỏ hàng</button>
+									</div>
+								</div>
 							</div>
-						</div>
+						}
 					</div>
-				}
 				</div>
-			</div>
-		</section>
+			</section>
+		}
+	</div>
 	<footer class="footer" style="margin-top: 200px;">
 		<!-- Copyright -->
 		<div class="text-center p-3" style="background-color: white; color: white;">
@@ -239,13 +251,21 @@
 	<!-- <footer class="footer">My footer</footer> -->
 	<script>
 		$(document).ready(function () {
-			$('#search-input').on('input', function () {
-				var name = $(this).val();
+			var searchTerm = '@ViewBag.Name';
+			if (searchTerm != '') {
+				$('#search-input').val(searchTerm);
+			}
+
+			$('form').submit(function (event) {
+				event.preventDefault(); // ngăn chặn hành động mặc định của trình duyệt
+
+				var name = $('#search-input').val();
 				$.ajax({
 					url: "/Home/Search",
 					data: { name: name },
 					success: function (result) {
 						$('#product-list').html(result);
+						$('#search-input').val(name);
 					},
 					error: function (xhr) {
 						alert(xhr.responseText);
@@ -254,6 +274,8 @@
 			});
 		});
 	</script>
+
+
 </body>
 
 </html>

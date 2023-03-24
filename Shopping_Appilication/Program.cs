@@ -1,4 +1,4 @@
-using Shopping_Appilication.IServices;
+ï»¿using Shopping_Appilication.IServices;
 using Shopping_Appilication.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,10 +9,15 @@ builder.Services.AddTransient<IProductServices, ProductServices>();
 //builder.Services.AddSingleton<IProductServices, ProductServices>();
 //builder.Services.AddScoped<IProductServices, ProductServices>();
 /*
- * Singleton: Services s? ch? ???c t?o m?t l?n trong su?t lifetime c?a ?ng d?ng. Phù h?p vói các services có tính toàn c?c và không thay ??i
- * Scope: M?i request s? kh?i t?o l?i services 1 l?n. Dùng cho các services có tính ch? ??c thù nào ?ó.
- * Transient: ?c kh?i t?o m?i khi có yêu c?u, m?i request s? ?c nh?n 1 services khác nhau, và ?c s? d?ng v?i services có nhi?u http
+ * Singleton: Services s? ch? ???c t?o m?t l?n trong su?t lifetime c?a ?ng d?ng. PhÃ¹ h?p vÃ³i cÃ¡c services cÃ³ tÃ­nh toÃ n c?c vÃ  khÃ´ng thay ??i
+ * Scope: M?i request s? kh?i t?o l?i services 1 l?n. DÃ¹ng cho cÃ¡c services cÃ³ tÃ­nh ch? ??c thÃ¹ nÃ o ?Ã³.
+ * Transient: ?c kh?i t?o m?i khi cÃ³ yÃªu c?u, m?i request s? ?c nh?n 1 services khÃ¡c nhau, vÃ  ?c s? d?ng v?i services cÃ³ nhi?u http
  * */
+//Khai bÃ¡o sá»­ dá»¥ng Ssesion vá»›i thá»i gian timeout lÃ  30s
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(30);
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,7 +30,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthorization();

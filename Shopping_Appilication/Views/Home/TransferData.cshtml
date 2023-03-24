@@ -1,0 +1,9 @@
+﻿<h1>Halo, Đây là chương trình truyền tải những thông điệp...</h1>
+@{
+	List<string> names = ViewData["name"] as List<string>;
+}
+@foreach (var x in names)
+{
+	<p>@x</p>
+}
+<h4>Dữ liệu từ Ssesion @ViewData["SsesionData"]</h4>
