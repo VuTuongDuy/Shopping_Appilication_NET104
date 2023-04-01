@@ -64,6 +64,12 @@
                 <a asp-controller="Image" asp-action="Create">Add New</a>
             </div>*@
             <div class="form-group">
+                <label asp-for="Size" class="control-label"></label>
+                <select asp-for="IdSize" class="form-control" asp-items="@ViewBag.SizeList"></select>
+                <span asp-validation-for="IdSize" class="text-danger"></span>
+                <a asp-controller="Size" asp-action="Create">Add New</a>
+            </div>
+            <div class="form-group">
                 <label asp-for="Image" class="control-label"></label>
                 <select asp-for="IdImage" class="form-control" asp-items="@ViewBag.ImageList"></select>
                 <span asp-validation-for="IdImage" class="text-danger"></span>

@@ -1,5 +1,4 @@
 ﻿@model Shopping_Appilication.Models.Product
-
 @{
     ViewData["Title"] = "Details";
 }
@@ -63,31 +62,37 @@
                         <p style="font-size: 13px; padding-top: 5px;">@Html.DisplayFor(model => model.Price)</p>
         </div>
         <h6 class="text-uppercase" style="font-size: 12px;">Select Size</h6>
-        <div class="label1" style="padding-top: 5px;">
-          <label class="radio"> <input type="radio" name="size" value="S" checked> <span class="span1">34</span>
-          </label>
-          <label class="radio">
-            <input type="radio" name="size" value="M"> <span class="span1">35</span>
-          </label>
-          <label class="radio"> <input type="radio" name="size" value="L"> <span class="span1">36</span>
-          </label>
-          <label class="radio"> <input type="radio" name="size" value="XL"> <span class="span2">37</span>
-          </label>
-          <label class="radio"> <input type="radio" name="size" value="XXL"> <span class="span2">38</span>
-          </label>
-          <label class="radio"> <input type="radio" name="size" value="XXL"> <span class="span2">39</span>
-          </label>
-          <label class="radio"> <input type="radio" name="size" value="XXL"> <span class="span3">40</span>
-          </label>
-          <label class="radio"> <input type="radio" name="size" value="XXL"> <span class="span3">41</span>
-          </label>
-          <label class="radio"> <input type="radio" name="size" value="XXL"> <span class="span3">42</span>
-          </label>
-        </div>
         <div class="cart mt-4 align-items-center">
-          <button class="btn btn-danger text mr-2 px-4" style="width: 310px; border-radius: 20px; color: white;">Add
-            to cart
-          </button>
+            <form method="post" action="@Url.Action("AddToCart", "CartDetail", new { id = Model.Id })">
+                <div class="label1" style="padding-top: 5px;">
+                    <label class="radio"> <input type="radio" name="size" value="34" checked> <span class="span1">34</span>
+                    </label>
+                    <label class="radio">
+                      <input type="radio" name="size" value="35"> <span class="span1">35</span>
+                    </label>
+                    <label class="radio"> <input type="radio" name="size" value="36"> <span class="span1">36</span>
+                    </label>
+                    <label class="radio"> <input type="radio" name="size" value="37"> <span class="span2">37</span>
+                    </label>
+                    <label class="radio"> <input type="radio" name="size" value="38"> <span class="span2">38</span>
+                    </label>
+                    <label class="radio"> <input type="radio" name="size" value="39"> <span class="span2">39</span>
+                    </label>
+                    <label class="radio"> <input type="radio" name="size" value="40"> <span class="span3">40</span>
+                    </label>
+                    <label class="radio"> <input type="radio" name="size" value="41"> <span class="span3">41</span>
+                    </label>
+                    <label class="radio"> <input type="radio" name="size" value="42"> <span class="span3">42</span>
+                    </label>
+                 </div>
+                 <button type="submit" class="btn btn-danger text mr-2 px-4" style="width: 310px; border-radius: 20px; color: white; margin-top:10px;">Add to cart</button>
+            </form>
+
+@*           <form>
+                <a href="@Url.Action("AddToCart", "CartDetail", new { id = Model.Id })" class="btn btn-danger text mr-2 px-4" style="width: 310px; border-radius: 20px; color: white;">
+                   Add to cart
+               </a>
+           </form>*@
         </div>
         <div class="chu1" style="width: 310px;">
           <p class="about" style="font-size: 11px; margin-top: 5px; text-align: justify;">The quad-burning

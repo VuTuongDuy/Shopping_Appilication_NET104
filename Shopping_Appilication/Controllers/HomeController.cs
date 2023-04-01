@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Shopping_Appilication.IServices;
 using Shopping_Appilication.Models;
 using Shopping_Appilication.Services;
@@ -31,27 +33,9 @@ namespace Shopping_Appilication.Controllers
             ViewData["SsesionData"] = content;
             return View();
         }
-        public IActionResult Product()
-        {
-            return View();
-        }
         public IActionResult Redirect()
         {
             return RedirectToAction("Index");
-        }
-        public IActionResult Show()
-        {
-            Product product = new Product()
-            {
-                Id = Guid.NewGuid(),
-                Name = "Nike Air 5",
-                AvailableQuantity = 1,
-                Supplier = "Nike",
-                Description = "Black shoes",
-                Price = 200000,
-                Status = 0
-            };
-            return View(product);
         }
         public IActionResult ShowListProduct1()
         {
@@ -84,8 +68,11 @@ namespace Shopping_Appilication.Controllers
             using (ShopDBContext shopDBContext = new ShopDBContext())
             {
                 var images = shopDBContext.Images.ToList();
-                SelectList selectList = new SelectList(images, "IdImage", "Name");
-                ViewBag.ImageList = selectList;
+                SelectList selectListImage = new SelectList(images, "IdImage", "Name");
+                var sizes = shopDBContext.Sizes.ToList();
+                SelectList selectListsSize = new SelectList(sizes, "IdSize", "Name");
+                ViewBag.ImageList = selectListImage;
+                ViewBag.SizeList = selectListsSize;
             }
             return View();
         }
@@ -104,8 +91,11 @@ namespace Shopping_Appilication.Controllers
             using (ShopDBContext shopDBContext = new ShopDBContext())
             {
                 var images = shopDBContext.Images.ToList();
-                SelectList selectList = new SelectList(images, "IdImage", "Name");
-                ViewBag.ImageList = selectList;
+                SelectList selectListImage = new SelectList(images, "IdImage", "Name");
+                var sizes = shopDBContext.Sizes.ToList();
+                SelectList selectListsSize = new SelectList(sizes, "IdSize", "Name");
+                ViewBag.ImageList = selectListImage;
+                ViewBag.SizeList = selectListsSize;
             }
             // Lấy Product từ database dựa theo id truyền vào từ route
             Product p = productServices.GetProductById(id);
@@ -115,6 +105,8 @@ namespace Shopping_Appilication.Controllers
         public IActionResult Edit(Product p) // Thực hiện việc Tạo mới
         {
             Product product = productServices.GetProductById(p.Id);
+            //Lưu dữ liệu cũ vào Session
+            HttpContext.Session.SetString("OldPrices", JsonConvert.SerializeObject(product));
             if (p.Price > product.Price)
             {
                 TempData["Message"] = "Gia moi phai lon hon gia cu";
@@ -141,6 +133,9 @@ namespace Shopping_Appilication.Controllers
         public IActionResult Products()
         {
             List<Product> lstProduct = productServices.GetAllProducts();
+            //Thêm list này vào ssesion
+            //HttpContext.Session.SetString("Prodcut", JsonConvert.SerializeObject(lstProduct));
+            //Json chuyển từ list sang string
             foreach (var product in lstProduct)
             {
                 string imageUrl = imageServices.GetImageUrl((Guid)product.IdImage);
@@ -154,6 +149,30 @@ namespace Shopping_Appilication.Controllers
             }
             return View(lstProduct);
         }
+        public IActionResult ShowListFromSession()
+        {
+            var oldPrices = HttpContext.Session.GetString("OldPrices");
+            if (oldPrices == null)
+            {
+                return Content("Session đã bị xóa, trang web đã bị chiếm quyền kiểm soát");
+            }
+            var products = JsonConvert.DeserializeObject<Product>(oldPrices);
+            return View(new List<Product> { products });
+        }
+        public IActionResult RollbackProduct(Guid id)
+        {
+            var oldPrices = HttpContext.Session.GetString("OldPrices");
+            if (oldPrices == null)
+            {
+                return Content("Session đã bị xóa, trang web đã bị chiếm quyền kiểm soát");
+            }
+            var product = JsonConvert.DeserializeObject<Product>(oldPrices);
+
+            productServices.UpdateProduct(product);
+
+            return RedirectToAction("ShowListProduct1");
+        }
+
         public IActionResult Search(string name)
         {
             try
@@ -171,7 +190,6 @@ namespace Shopping_Appilication.Controllers
             {
                 return Content(ex.InnerException.Message);
             }
-
         }
         public IActionResult Admin()
         {

@@ -251,6 +251,22 @@
 	<!-- <footer class="footer">My footer</footer> -->
 	<script>
 		$(document).ready(function () {
+			var timeout = null;
+			$('#search-input').on('keyup', function () {
+				clearTimeout(timeout);
+				var name = $(this).val();
+				if (name) {
+					timeout = setTimeout(function () {
+						var url = '/Home/Search?name=' + name;
+						window.location.href = url;
+					}, 1000); // Để ng dùng nhập vào 1s rồi mới load
+				}
+			});
+		});
+
+	</script>
+	<script>
+		$(document).ready(function () {
 			var searchTerm = '@ViewBag.Name';
 			if (searchTerm != '') {
 				$('#search-input').val(searchTerm);
@@ -274,8 +290,6 @@
 			});
 		});
 	</script>
-
-
 </body>
 
 </html>

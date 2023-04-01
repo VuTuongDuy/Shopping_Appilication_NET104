@@ -1,0 +1,246 @@
+﻿@model IEnumerable<Shopping_Appilication.Models.CartItem>
+@{
+    ViewData["Title"] = "Giỏ hàng";
+}
+
+<link rel="stylesheet" href="~/css/giohang.css">
+<section class="h-100 gradient-custom">
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center my-4">
+            <div class="col-md-8">
+                <div class="card mb-4" style="border: 1px solid white;">
+                    <div class="card-header py-3">
+                        <h5 class="mb-0">Bag</h5>
+                    </div>
+                    @if (!Model.Any())
+                    {
+                        <h6 style="margin-top:10px; margin-left:15px;">There are no items in your bag.</h6>
+                    }
+                    else
+                    {
+                    <div class="card-body">
+                        <!-- Single item -->
+                        <div class="row">
+                            @foreach (var item in Model)
+                            {
+                                <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                                    <!-- Image -->
+                                    <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
+                                        <img src="@item.ProductImage" class="w-100" alt="Blue Jeans Jacket"/>
+                                        <a href="#!">
+                                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
+                                        </a>
+                                    </div>
+                                    <!-- Image -->
+                                </div>
+
+                                <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                                    <!-- Data -->
+                                    <p><strong>@item.ProductName</strong></p>
+                                    <p>@item.Description</p>
+                                    <p>Size @item.Size</p>
+                                    <button type="button" class="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
+                                            title="Remove item">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm mb-2" data-mdb-toggle="tooltip"
+                                            title="Move to the wish list">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                    <!-- Data -->
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                                    <!-- Quantity -->
+                                    <div class="d-flex mb-4" style="max-width: 300px">
+                                        <button style="height: 37px; border-radius: 4px;" class="btn btn-primary px-3 me-2"
+                                                onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+
+                                        <div class="form-outline">
+                                            <input id="form1" min="1" name="quantity" value="@item.Quantity" type="number" class="form-control" />
+                                        </div>
+
+                                        <button style="height: 37px; border-radius: 4px;" class="btn btn-primary px-3 ms-2"
+                                                onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <!-- Quantity -->
+                                    <!-- Price -->
+                                    <p class="text-start text-md-center">
+                                    <p style="color: red; padding-left: 38px;">2,753,149 <del style="color: black;">3.407.000đ</del></p>
+                                    <!-- Price -->
+                                </div>
+                                <hr class="my-4" />
+                            }
+                        </div>
+                        <!-- Single item -->
+                   </div>
+                   }
+                </div>
+                <div class="card mb-4" style="border: 1px solid white;">
+                    <div class="card-body">
+                        <p><strong>Favourites</strong></p>
+                        <p class="mb-0">There are no items saved to your favourites.</p>
+                    </div>
+                </div>
+                <div class="card mb-4 mb-lg-0" style="border: 1px solid white;">
+                    <div class="card-body">
+                        <p><strong>We accept</strong></p>
+                        <img class="me-2" style="width: 45px;"
+                             src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg"
+                             alt="Visa" />
+                        <img class="me-2" style="width: 45px;"
+                             src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/amex.svg"
+                             alt="American Express" />
+                        <img class="me-2" style="width: 45px;"
+                             src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/mastercard.svg"
+                             alt="Mastercard" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4" style="border: 1px solid white;">
+                    <div class="card-header py-3">
+                        <h5 class="mb-0">Summary</h5>
+                    </div>
+                    <div class="card-body" style="border: 1px solid white;">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                                Subtotal
+                                <span>5.709.000đ</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                Estimated Delivery & Handling
+                                <span>130.000đ</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                                <div>
+                                    <strong>Total</strong>
+                                </div>
+                                <span><strong>5.903.000đ</strong></span>
+                            </li>
+                        </ul>
+
+                        <button class="btn1 btn-danger text mr-2 px-4"
+                                style="width: 355px; height: 45px; border-radius: 25px; color: white; background-color: black;">
+                            Member
+                            Checkout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="shell">
+    <div class="container">
+        <div class="tieude1" style="padding-bottom: 8px;">
+            <h3>Có thể bạn quan tâm</h3>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="wsk-cp-product">
+                    <div class="wsk-cp-img">
+                        <img src="/image/anh26.png" alt="Product" class="img-responsive" />
+                    </div>
+                    <div class="wsk-cp-text">
+                        <div class="category">
+                            <span>View</span>
+                        </div>
+                        <div class="title-product">
+                            <h3>Nike ZoomX Vaporfly</h3>
+                        </div>
+                        <div class="description-prod">
+                            <p>Men's Road Racing Shoesk NEXT% 2</p>
+                        </div>
+                        <div class="card-footer" style="padding-left: 38px;">
+                            <div class="wcf-left">
+                                <span class="price" style="color: red; font-size: 16px;">
+                                    5,617,649đ <del style="color: black; font-size: 16px;"> 6.408.000đ</del>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="wsk-cp-product">
+                    <div class="wsk-cp-img">
+                        <img src="/image/anh27.png" alt="Product" class="img-responsive" />
+                    </div>
+                    <div class="wsk-cp-text">
+                        <div class="category">
+                            <span>View</span>
+                        </div>
+                        <div class="title-product">
+                            <h3>Nike Pegasus Trail 3</h3>
+                        </div>
+                        <div class="description-prod">
+                            <p>Men's Trail-Running Shoes</p>
+                        </div>
+                        <div class="card-footer" style="padding-left: 38px;">
+                            <div class="wcf-left">
+                                <span class="price" style="color: red; font-size: 16px;">
+                                    3,829,000đ <del style="color: black; font-size: 16px;"> 4.205.000đ</del>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="wsk-cp-product">
+                    <div class="wsk-cp-img">
+                        <img src="/image/anh28.png" alt="Product" class="img-responsive" />
+                    </div>
+                    <div class="wsk-cp-text">
+                        <div class="category">
+                            <span>View</span>
+                        </div>
+                        <div class="title-product">
+                            <h3>Nike Heritage</h3>
+                        </div>
+                        <div class="description-prod">
+                            <p>Drawstring Bag (13L)</p>
+                        </div>
+                        <div class="card-footer" style="padding-left: 50px;">
+                            <div class="wcf-left">
+                                <span class="price" style="color: red; font-size: 16px;">
+                                    509,000đ <del style="color: black; font-size: 16px;"> 699.000đ</del>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="wsk-cp-product">
+                    <div class="wsk-cp-img">
+                        <img src="/image/anh29.png" alt="Product" class="img-responsive" />
+                    </div>
+                    <div class="wsk-cp-text">
+                        <div class="category">
+                            <span>View</span>
+                        </div>
+                        <div class="title-product">
+                            <h3>Nike React Infinity Run</h3>
+                        </div>
+                        <div class="description-prod">
+                            <p>Men's Road Running Shoes</p>
+                        </div>
+                        <div class="card-footer" style="padding-left: 38px;">
+                            <div class="wcf-left">
+                                <span class="price" style="color: red; font-size: 16px;">
+                                    3,747,649đ <del style="color: black; font-size: 16px;"> 4.409.000đ</del>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

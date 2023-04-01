@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IProductServices, ProductServices>();
+builder.Services.AddHttpContextAccessor();
 //builder.Services.AddSingleton<IProductServices, ProductServices>();
 //builder.Services.AddScoped<IProductServices, ProductServices>();
 /*
@@ -16,7 +17,7 @@ builder.Services.AddTransient<IProductServices, ProductServices>();
 //Khai báo sử dụng Ssesion với thời gian timeout là 30s
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromSeconds(30);
+    options.IdleTimeout = TimeSpan.FromSeconds(60);
 });
 var app = builder.Build();
 

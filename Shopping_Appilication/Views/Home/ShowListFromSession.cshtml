@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<Shopping_Appilication.Models.Product>
 
 @{
-    ViewData["Title"] = "ShowListProduct1";
+    ViewData["Title"] = "ShowListFromSession";
 }
 
-<h1>ShowListProduct1</h1>
+<h1>ShowListFromSession</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -12,9 +12,9 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
+@*            <th>
                 @Html.DisplayNameFor(model => model.Id)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
@@ -34,6 +34,9 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
 @*            <th>
+                @Html.DisplayNameFor(model => model.ImageUrl)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.IdColor)
             </th>
             <th>
@@ -51,9 +54,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+@*            <td>
                 @Html.DisplayFor(modelItem => item.Id)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
@@ -73,6 +76,9 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
 @*            <td>
+                @Html.DisplayFor(modelItem => item.ImageUrl)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.IdColor)
             </td>
             <td>
@@ -87,17 +93,10 @@
             <td>
                 @Html.ActionLink("Edit", "Edit", new {  id=item.Id  }) |
                 @Html.ActionLink("Details", "Details", new {  id=item.Id  }) |
-                @Html.ActionLink("Delete", "Delete", new {  id=item.Id  })
-@*                @Html.ActionLink("RollbackProduct", "RollbackProduct", new {  id=item.Id  })*@
+                @Html.ActionLink("Delete", "Delete", new {  id=item.Id  }) |
+                @Html.ActionLink("RollbackProduct", "RollbackProduct", new {  id=item.Id  })
             </td>
         </tr>
 }
     </tbody>
-    @if (TempData["Message"] != null)
-    {
-        <script>
-            alert('@TempData["Message"]');
-        </script>
-    }
-
 </table>

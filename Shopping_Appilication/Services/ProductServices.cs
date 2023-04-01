@@ -41,8 +41,8 @@ namespace Shopping_Appilication.Services
 
         public List<Product> GetAllProducts()
         {
-            //return _dbContext.Products.ToList();
-            return _dbContext.Products.Where(c => c.Status < 3).ToList();
+            return _dbContext.Products.ToList();
+            //return _dbContext.Products.Where(c => c.Status < 3).ToList();
         }
 
         public Product GetProductById(Guid id)

@@ -72,16 +72,19 @@
 						<li class="nav-item" style="padding-left: 15px;">
 							<a class="nav-link active" aria-current="page" asp-area="" asp-controller="Home" asp-action="Admin">Admin</a>
 						</li>
+						<li class="nav-item" style="padding-left: 15px;">
+							<a class="nav-link active" aria-current="page" asp-area="" asp-controller="Home" asp-action="ShowListFromSession">Lab 5_6</a>
+						</li>
 					</ul>
 					<form class="d-flex" role="search" style="padding-right: 30px;" method="get" action="@Url.Action("Search", "Home")">
 						<div class="src-box">
-							<input type="text" placeholder="@ViewBag.Name Search "Search"" id="search-input" name="name">
+							<input type="text" placeholder="@ViewBag.Name Search "Search"" id="search-input" name="name" value="@ViewBag.Name">
 							@*<input type="text" placeholder="Search" id="search-input" name="name">*@
 							<button type="submit"></button>
 						</div>
 						<div class="buttonok" style="padding-right: 15px;">
-							<a class="bag" href="#giohang">
-								<img src="~/image/icons8-shopping-bag-32.png" alt="https://nroblue.com/"
+							<a class="bag" asp-controller="CartDetail" asp-action="CartDetail">
+								<img src="~/image/icons8-shopping-bag-32.png" alt="??????"
 									 style="width: 40px; height: 35px; padding-left: 8px; padding-top: 5px;">
 							</a>
 						</div>
