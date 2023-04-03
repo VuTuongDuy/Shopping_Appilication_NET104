@@ -1,6 +1,6 @@
-﻿@model IEnumerable<Shopping_Appilication.Models.Product>
+﻿@model IEnumerable<Product>
 @{
-	ViewData["Title"] = "Sản phẩm";
+	ViewData["Title"] = "Search";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -11,11 +11,11 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<link rel="stylesheet" href="~/css/sanpham.css">
 	<link href="https://unpkg.com/tailwindcss@0.3.0/dist/tailwind.min.css" rel="stylesheet">
 	<link rel="stylesheet" href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css'>
 	<link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 	<!-- Google Fonts Roboto -->
@@ -66,20 +66,20 @@
 			<div id="orange"><span class="fa fa-minus"></span></div>
 			<form style="padding-top: 10px;">
 				<div class="form-group">
-					<input type="checkbox" id="price1" name="price" value="1000000" data-price="1">
-					<label for="price1">Dưới 1.000.000đ</label>
+					<input type="checkbox" id="25off">
+					<label for="25">Dưới 1.000.000đ</label>
 				</div>
 				<div class="form-group">
-					<input type="checkbox" id="price2" name="price" value="2700000" data-price="2">
-					<label for="price2">1.001.00đ-2.700.000</label>
+					<input type="checkbox" id="5off">
+					<label for="5off" id="off">1.001.00đ-2.700.000</label>
 				</div>
 				<div class="form-group">
-					<input type="checkbox" id="price3" name="price" value="3999000" data-price="3">
-					<label for="price3">2.701.000-3.999.000</label>
+					<input type="checkbox" id="5off">
+					<label for="5off" id="off">2.701.000-3.999.000</label>
 				</div>
 				<div class="form-group">
-					<input type="checkbox" id="price4" name="price" value="4000000" data-price="4">
-					<label for="price4">Trên 4.000.000đ</label>
+					<input type="checkbox" id="5off">
+					<label for="5off" id="off">Trên 4.000.000đ</label>
 				</div>
 			</form>
 		</div>
@@ -114,41 +114,45 @@
 		<div class="py-2 ml-3 bottom ml-3" style="margin-top: 25px;">
 			<h6 class="font-weight-bold">Sports</h6>
 			<div id="orange"><span class="fa fa-minus"></span></div>
-			<form id="filter-form" style="padding-top: 10px;">
+			<form style="padding-top: 10px;">
 				<div class="form-group">
-					<input type="checkbox" id="name1" name="selectedValues" value="Lifestyle">
-					<label for="Lifestyle">Lifestyle</label>
+					<input type="checkbox" id="25off">
+					<label for="25">Lifestyle</label>
 				</div>
 				<div class="form-group">
-					<input type="checkbox" id="name2" name="selectedValues" value="Running">
-					<label for="Running">Running</label>
+					<input type="checkbox" id="5off">
+					<label for="5off" id="off">Running</label>
 				</div>
 				<div class="form-group">
-					<input type="checkbox" id="name3" name="selectedValues" value="Trainning & Gym">
+					<input type="checkbox" id="5off">
 					<label for="5off" id="off">Training & Gym</label>
 				</div>
 				<div class="form-group">
-					<input type="checkbox" id="name4" name="selectedValues" value="Basketball">
+					<input type="checkbox" id="5off">
 					<label for="5off" id="off">Basketball</label>
 				</div>
 				<div class="form-group">
-					<input type="checkbox" id="name5" name="selectedValues" value="Football">
+					<input type="checkbox" id="5off">
 					<label for="5off" id="off">Football</label>
 				</div>
 				<div class="form-group">
-					<input type="checkbox" id="name6" name="selectedValues" value="Yoga">
+					<input type="checkbox" id="5off">
 					<label for="5off" id="off">Yoga</label>
 				</div>
 				<div class="form-group">
-					<input type="checkbox" id="name7" name="selectedValues" value="Yoga">
+					<input type="checkbox" id="5off">
 					<label for="5off" id="off">Golf</label>
 				</div>
 				<div class="form-group">
-					<input type="checkbox" id="name8" name="selectedValues" value="Tenis">
+					<input type="checkbox" id="5off">
 					<label for="5off" id="off">Tenis</label>
 				</div>
 				<div class="form-group">
-					<input type="checkbox" id="name9" name="selectedValues" value="Dance">
+					<input type="checkbox" id="5off">
+					<label for="5off" id="off">Football</label>
+				</div>
+				<div class="form-group">
+					<input type="checkbox" id="5off">
 					<label for="5off" id="off">Dance</label>
 				</div>
 			</form>
@@ -159,62 +163,80 @@
 			<div id="orange"><span class="fa fa-minus"></span></div>
 			<form style="padding-top: 10px;">
 				<div class="" style="float: left;">
-					<button type="button" class="color-button color-red" style="background-color: rgb(205, 9, 9); width: 25px; height: 25px; border-radius: 50%; border: none;"></button>
+					<input type="button"
+						   style="width: 25px; height: 25px; background-color: rgb(205, 9, 9); border-radius: 50%;">
 					<p style="font-size: 11px; padding-left: 5px;">Đỏ</p>
 				</div>
 				<div class="" style="float: left; padding-left: 10px;">
-					<button type="button" class="color-button color-black" style="background-color: black; width: 25px; height: 25px; border-radius: 50%; border: none;"></button>
+					<input type="button"
+						   style="width: 25px; height: 25px; background-color: black; border-radius: 50%;">
 					<p style="font-size: 11px; padding-left: 5px;">Đen</p>
 				</div>
 				<div class="" style="float: left; padding-left: 10px;">
-					<button type="button" class="color-button color-orange" style="background-color: orange; width: 25px; height: 25px; border-radius: 50%; border: none;"></button>
+					<input type="button"
+						   style="width: 25px; height: 25px; background-color: orange; border-radius: 50%;">
 					<p style="font-size: 11px; padding-left: 5px;">Vàng</p>
 				</div>
 				<div class="" style="float: left; padding-left: 10px;">
-					<button type="button" class="color-button color-violet" style="background-color: violet; width: 25px; height: 25px; border-radius: 50%; border: none;"></button>
+					<input type="button"
+						   style="width: 25px; height: 25px; background-color: violet; border-radius: 50%;">
 					<p style="font-size: 11px; padding-left: 5px;">Tím</p>
 				</div>
 				<br>
 				<div class="" style="float: right; padding-top: 15px; padding-right: 69px;">
-					<button type="button" class="color-button color-green" style="background-color: green; width: 25px; height: 25px; border-radius: 50%; border: none;"></button>
+					<input type="button"
+						   style="width: 25px; height: 25px; background-color: green; border-radius: 50%;">
 					<p style="font-size: 11px; padding-left: 5px;">Xanh</p>
 				</div>
 				<div class="" style="float: right; padding-right: 7px; padding-top: 15px">
-					<button type="button" class="color-button color-white" style="background-color: white; width: 25px; height: 25px; border-radius: 50%; border: 1px solid rgb(120, 117, 117);"></button>
+					<input type="button"
+						   style="width: 25px; height: 25px; background-color: white; border-radius: 50%; border: 1px solid rgb(120, 117, 117);">
 					<p style="font-size: 11px; padding-left: 5px;">Trắng</p>
 				</div>
 				<div class="" style="float: right; padding-right: 8px; padding-top: 15px">
-					<button type="button" class="color-button color-orange" style="width: 25px; height: 25px; background-color: rgb(255, 85, 23); border-radius: 50%; border: 1px solid rgb(120, 117, 117);"></button>
+					<input type="button"
+						   style="width: 25px; height: 25px; background-color: rgb(255, 85, 23); border-radius: 50%; border: 1px solid rgb(120, 117, 117);">
 					<p style="font-size: 11px; padding-left: 5px;">Cam</p>
 				</div>
 				<div class="" style="float: right; padding-right: 9px; padding-top: 15px">
-					<button type="button" class="color-button color-brown" style="width: 25px; height: 25px; background-color: brown; border-radius: 50%; border: 1px solid rgb(120, 117, 117);"></button>
+					<input type="button"
+						   style="width: 25px; height: 25px; background-color: brown; border-radius: 50%; border: 1px solid rgb(120, 117, 117);">
 					<p style="font-size: 11px; padding-left: 5px;">Nâu</p>
 				</div>
 			</form>
 		</div>
 	</section>
 	<!-- products section -->
-	<section id="products" style="float: right">
-		<div class="container mt-4 d-flex justify-content-center" style="padding-top: 15px;">
-			<div class="row g-0">
-				@foreach (var item in Model)
-				{
-					<div class="col-sm-6 col-md-4" style="padding-top: 5px;">
-						<div class="cards">
-							<div class="first bg-white p-4 text-center">
-								<a href="@Url.Action("Details", "Home", new { id = item.Id })"><img src="@item.ImageUrl" style="width: 100%;"></a>
-								<h5 style="padding-top: 5px;">@Html.DisplayFor(modelItem => item.Name)</h5>
-								<p class="line1">@Html.DisplayFor(modelItem => item.Description)</p>
-								<p style="font-size: 13px;">@Html.DisplayFor(modelItem => item.Price)</p>
-								<button class="btnok">Thêm vào giỏ hàng</button>
+	<div id="product-list">
+		<!-- Nội dung sản phẩm sẽ được tải lên tại đây -->
+		@if (Model.Count() == 0)
+		{
+			<h2 style="text-align:center; padding-top:50px;">We could not find anything for "@ViewBag.Name"</h2>
+		}
+		else
+		{
+			<section id="products" style="float: right">
+				<div class="container mt-4 d-flex justify-content-center" style="padding-top: 15px;">
+					<div class="row g-0">
+						@foreach (var product in Model)
+						{
+							<div class="col-sm-6 col-md-4" style="padding-top: 5px;">
+								<div class="cards">
+									<div class="first bg-white p-4 text-center">
+										<a href="@Url.Action("Details", "Home", new { id = product.Id })"><img src="@product.ImageUrl" style="width: 100%;"></a>
+										<h5 style="padding-top: 5px;">@Html.DisplayFor(modelItem => product.Name)</h5>
+										<p class="line1">@Html.DisplayFor(modelItem => product.Description)</p>
+										<p style="font-size: 13px;">@Html.DisplayFor(modelItem => product.Price)</p>
+										<button class="btnok">Thêm vào giỏ hàng</button>
+									</div>
+								</div>
 							</div>
-						</div>
+						}
 					</div>
-				}
-			</div>
-		</div>
-	</section>
+				</div>
+			</section>
+		}
+	</div>
 	<footer class="footer" style="margin-top: 200px;">
 		<!-- Copyright -->
 		<div class="text-center p-3" style="background-color: white; color: white;">
@@ -227,28 +249,6 @@
 		<!-- Copyright -->
 	</footer>
 	<!-- <footer class="footer">My footer</footer> -->
-	<script>
-		$('input[name=price]').change(function () {
-			var selectedPrice = $(this).data('price');
-			$('input[name=price]').not(this).prop('checked', false);
-			// Gọi lại phương thức FilterProduct() với tham số mới
-			FilterProduct(selectedPrice);
-		});
-	</script>
-	<script>
-		let currentColorButton = null;
-		const colorButtons = document.querySelectorAll('.color-button');
-		colorButtons.forEach(button => {
-			button.addEventListener('click', () => {
-				console.log("Button clicked!"); // Thêm đoạn console.log()
-				if (currentColorButton !== null) {
-					currentColorButton.classList.remove('selected');
-				}
-				currentColorButton = button;
-				currentColorButton.classList.add('selected');
-			});
-		});
-	</script>
 </body>
 
 </html>

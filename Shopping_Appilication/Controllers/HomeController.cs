@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Shopping_Appilication.IServices;
 using Shopping_Appilication.Models;
 using Shopping_Appilication.Services;
+using System;
 using System.Diagnostics;
 
 namespace Shopping_Appilication.Controllers
@@ -133,19 +134,10 @@ namespace Shopping_Appilication.Controllers
         public IActionResult Products()
         {
             List<Product> lstProduct = productServices.GetAllProducts();
-            //Thêm list này vào ssesion
-            //HttpContext.Session.SetString("Prodcut", JsonConvert.SerializeObject(lstProduct));
-            //Json chuyển từ list sang string
             foreach (var product in lstProduct)
             {
                 string imageUrl = imageServices.GetImageUrl((Guid)product.IdImage);
                 product.ImageUrl = imageUrl;
-                //string imageUrl = null;
-                //if (product.IdImage.HasValue)
-                //{
-                //    imageUrl = imageServices.GetImageUrl(product.IdImage.Value);
-                //}
-                //product.ImageUrl = imageUrl;
             }
             return View(lstProduct);
         }
@@ -219,6 +211,7 @@ namespace Shopping_Appilication.Controllers
             ViewData["SsesionData"] = content;
             return View();
         }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
