@@ -9,18 +9,20 @@ using Shopping_Appilication.Services;
 using System;
 using System.Diagnostics;
 
-namespace Shopping_Appilication.Controllers
+namespace Shopping_Appilication.Controllers 
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IProductServices productServices;//Interface
         private readonly IImageServices imageServices;
+        private readonly IUserServices userServices;
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
             productServices = new ProductServices();//class 
             imageServices = new ImageServices();
+            userServices = new UserServices();
         }
 
         public IActionResult Index()
@@ -78,8 +80,22 @@ namespace Shopping_Appilication.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Product p)
+        public IActionResult Create(Product p/*, [Bind]IFormFile imageFile*/)
         {
+            //var x = imageFile.FileName;
+            //if (imageFile != null && imageFile.Length > 0)
+            //{
+            //    //trỏ tới thư mục wwwroot để lát nữa thực hiện việc copy sang
+            //    var path = Path.Combine(
+            //        Directory.GetCurrentDirectory(), "wwwroot", "image", imageFile.FileName);
+            //    using(var stream = new FileStream(path, FileMode.Create))
+            //    {
+            //        //thực hiện việc copy ảnh vừa chọn sang thư mục mới
+            //        imageFile.CopyTo(stream);
+            //    }
+            //    //gán lại gtri cho description của đối tượng bằng tên file ảnh đã đc sao chép
+            //    p.Description = imageFile.FileName;
+            //}
             if (productServices.AddProduct(p))
             {
                 return RedirectToAction("ShowListProduct1");

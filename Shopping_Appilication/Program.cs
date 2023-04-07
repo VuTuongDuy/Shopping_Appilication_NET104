@@ -17,7 +17,7 @@ builder.Services.AddHttpContextAccessor();
 //Khai báo sử dụng Ssesion với thời gian timeout là 30s
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromSeconds(60);
+    options.IdleTimeout = TimeSpan.FromSeconds(120);
 });
 var app = builder.Build();
 

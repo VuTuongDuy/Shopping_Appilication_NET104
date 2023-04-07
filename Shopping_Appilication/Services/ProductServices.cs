@@ -44,7 +44,6 @@ namespace Shopping_Appilication.Services
             return _dbContext.Products.ToList();
             //return _dbContext.Products.Where(c => c.Status < 3).ToList();
         }
-
         public Product GetProductById(Guid id)
         {
             return _dbContext.Products.FirstOrDefault(c => c.Id == id);// tìm ra thằng đầu tiên trong những thằng giống  nhau
