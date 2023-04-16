@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shopping_Appilication.Models;
 
@@ -11,9 +12,10 @@ using Shopping_Appilication.Models;
 namespace Shopping_Appilication.Migrations
 {
     [DbContext(typeof(ShopDBContext))]
-    partial class ShopDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230409061126_09_04_2023_13_11")]
+    partial class _09_04_2023_13_11
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,9 +40,6 @@ namespace Shopping_Appilication.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(1000)");
-
-                    b.Property<decimal>("ToTalPrice")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("UserID")
                         .HasColumnType("uniqueidentifier");

@@ -32,9 +32,13 @@ namespace Shopping_Appilication.Controllers
 
         public IActionResult Privacy()
         {
-            string content = HttpContext.Session.GetString("Message");//Lấy data từ ssesion
-            ViewData["SsesionData"] = content;
-            return View();
+            var ProductDelete = HttpContext.Session.GetString("Product");
+            if (ProductDelete == null)
+            {
+                return Content("Lam gi co ma hien thi");
+            }
+            var product = JsonConvert.DeserializeObject<Product>(ProductDelete);
+            return View(new List<Product> { product });
         }
         public IActionResult Redirect()
         {
@@ -80,22 +84,12 @@ namespace Shopping_Appilication.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Product p/*, [Bind]IFormFile imageFile*/)
+        public IActionResult Create(Product p)
         {
-            //var x = imageFile.FileName;
-            //if (imageFile != null && imageFile.Length > 0)
-            //{
-            //    //trỏ tới thư mục wwwroot để lát nữa thực hiện việc copy sang
-            //    var path = Path.Combine(
-            //        Directory.GetCurrentDirectory(), "wwwroot", "image", imageFile.FileName);
-            //    using(var stream = new FileStream(path, FileMode.Create))
-            //    {
-            //        //thực hiện việc copy ảnh vừa chọn sang thư mục mới
-            //        imageFile.CopyTo(stream);
-            //    }
-            //    //gán lại gtri cho description của đối tượng bằng tên file ảnh đã đc sao chép
-            //    p.Description = imageFile.FileName;
-            //}
+            if (productServices.GetAllProducts().Any(c => c.Name == p.Name) || productServices.GetAllProducts().Any(c => c.Supplier == p.Supplier))
+            {
+                return Content("Ten sp va nha sx da ton tai");
+            }else
             if (productServices.AddProduct(p))
             {
                 return RedirectToAction("ShowListProduct1");
@@ -121,14 +115,12 @@ namespace Shopping_Appilication.Controllers
 
         public IActionResult Edit(Product p) // Thực hiện việc Tạo mới
         {
-            Product product = productServices.GetProductById(p.Id);
-            //Lưu dữ liệu cũ vào Session
-            HttpContext.Session.SetString("OldPrices", JsonConvert.SerializeObject(product));
-            if (p.Price > product.Price)
+            //Product product = productServices.GetProductById(p.Id);
+            ////Lưu dữ liệu cũ vào Session
+            //HttpContext.Session.SetString("OldPrices", JsonConvert.SerializeObject(product));
+            if (productServices.GetAllProducts().Any(c => c.Name == p.Name) || productServices.GetAllProducts().Any(c => c.Supplier == p.Supplier))
             {
-                TempData["Message"] = "Gia moi phai lon hon gia cu";
-                return RedirectToAction("ShowListProduct1");
-                //return BadRequest("Giá mới phải lớn hơn hoặc bằng giá cũ!");
+                return Content("Ten sp va nha sx da ton tai");
             }
             else
             {
@@ -141,6 +133,8 @@ namespace Shopping_Appilication.Controllers
         }
         public IActionResult Delete(Guid id)
         {
+            var ProductDelete = productServices.GetProductById(id);
+            HttpContext.Session.SetString("Product", JsonConvert.SerializeObject(ProductDelete));
             if (productServices.DeleteProduct(id))
             {
                 return RedirectToAction("ShowListProduct1");
@@ -169,15 +163,14 @@ namespace Shopping_Appilication.Controllers
         }
         public IActionResult RollbackProduct(Guid id)
         {
-            var oldPrices = HttpContext.Session.GetString("OldPrices");
-            if (oldPrices == null)
+            var ProductDelete = HttpContext.Session.GetString("Product");
+            if (productServices == null)
             {
-                return Content("Session đã bị xóa, trang web đã bị chiếm quyền kiểm soát");
+                return Content("Co cai nit");
             }
-            var product = JsonConvert.DeserializeObject<Product>(oldPrices);
-
-            productServices.UpdateProduct(product);
-
+            var product = JsonConvert.DeserializeObject<Product>(ProductDelete);
+            productServices.AddProduct(product);
+            HttpContext.Session.Remove("Product");
             return RedirectToAction("ShowListProduct1");
         }
 
@@ -227,7 +220,15 @@ namespace Shopping_Appilication.Controllers
             ViewData["SsesionData"] = content;
             return View();
         }
-
+        public IActionResult SearchSP(string sanpham)
+        {
+            var sanPham = productServices.GetProductsByName(sanpham);
+            if (sanPham == null)
+            {
+                return Content("Ko tim thay");
+            }
+            return View(sanPham);
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

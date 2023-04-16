@@ -15,6 +15,8 @@ namespace Shopping_Appilication.Configurations
                 IsRequired(); // Datetime not null
             builder.Property(c => c.Status).HasColumnType("nvarchar(1000)").
                 IsRequired();
+            builder.Property(c => c.MaHD).HasColumnType("nvarchar(10)").IsRequired();
+            builder.Property(c => c.ToTalPrice).HasColumnType("decimal(18, 2)").IsRequired();
             builder.HasOne(c => c.User).WithMany(c => c.Bills).
                 HasForeignKey(c => c.UserID);
         }

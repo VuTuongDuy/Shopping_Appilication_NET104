@@ -12,9 +12,10 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.CodeAnalysis.Scripting;
+using System.Text.RegularExpressions;
 
 namespace Shopping_Appilication.Controllers
-{
+{ 
     public class UserController:Controller
     {
         private readonly ILogger<UserController> _logger;
@@ -104,12 +105,15 @@ namespace Shopping_Appilication.Controllers
             if (user.Password != ConfirmPassword)
             {
                 return View();
-            }else
+            }
+            else
             if (userServices.GetAllUser().Any(c => c.UserName == user.UserName))
             {
                 return Json(new { success = false, message = "Tên đăng nhập đã tồn tại" });
             }
             else
+            user.SoDienThoai = "000000000";
+            user.DiaChi = "OK";
             if (userServices.AddUser(user))
             {
                 TempData["UserName"] = user.UserName;
@@ -142,11 +146,6 @@ namespace Shopping_Appilication.Controllers
                 return Json(new { success = false, message = "Vui lòng nhập đúng thông tin tài khoản" });
             }
         }
-        //public IActionResult Login()
-        //{
-        //    ViewBag.SignUpSuccess = TempData["SignUpSuccess"];
-        //    return View();
-        //}
         public IActionResult ForgotPassword()
         {
             return View();
@@ -265,7 +264,24 @@ namespace Shopping_Appilication.Controllers
             TempData["SignUpSuccess"] = "Mật khẩu đã được cập nhật thành công!";
             return RedirectToAction("Login", "User");
         }
-
+        public IActionResult DangNhap()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult DangNhap(User user)
+        {
+            if (user.UserName.Length <= 6 || user.Password.Length <= 6)
+            {
+                return Content("User Name va Password phai dai hon 6 ky tu");
+            }
+            Regex regex = new Regex("^[a-zA-Z0-9]+$");
+            if (!regex.IsMatch(user.UserName) || !regex.IsMatch(user.Password))
+            {
+                return Content("User Name và Password chỉ được chứa chữ cái và số.");
+            }
+            return RedirectToAction("Index", "Home");
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -6,6 +6,7 @@ using Shopping_Appilication.Services;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Http.Extensions;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace Shopping_Appilication.Controllers
 {
@@ -16,6 +17,9 @@ namespace Shopping_Appilication.Controllers
         private readonly IProductServices productServices;
         private readonly IImageServices imageServices;
         private readonly ISizeServices sizeServices;
+        private readonly IUserServices userServices;
+        private readonly IBillServices billServices;
+        private string newMaHD = "HD01";
         public CartDetailController(ILogger<CartDetailController> logger)
         {
             _logger = logger;
@@ -23,11 +27,14 @@ namespace Shopping_Appilication.Controllers
             productServices = new ProductServices();
             imageServices = new ImageServices();
             sizeServices = new SizeServices();
+            userServices = new UserServices();
+            billServices = new BillServices();
         }
         public IActionResult CartDetail()
         {
             var products = SessionServices.GetObjFromSession(HttpContext.Session, "Cart");
-            return View(products);
+            var viewModel = new HoaDonViewModel { CartItems = products };
+            return View(viewModel);
         }
         public IActionResult AddToCart(Guid id, string size)
         {
@@ -39,7 +46,11 @@ namespace Shopping_Appilication.Controllers
             {
                 return NotFound();
             }
-
+            var allBills = billServices.GetAllBill();
+            if (allBills != null && allBills.Count > 0)
+            {
+                newMaHD = "HD0" + (allBills.Count + 1).ToString();
+            }
             // Lấy dữ liệu giỏ hàng từ Session
             var cartItems = SessionServices.GetObjFromSession(HttpContext.Session, "Cart") as List<CartItem>;
             //Lấy ảnh của sp
@@ -63,7 +74,8 @@ namespace Shopping_Appilication.Controllers
                         ProductImage = product.ImageUrl,
                         ProductName = product.Name,
                         Description = product.Description,
-                        Price = product.Price
+                        Price = product.Price,
+                        MaHD = newMaHD
                     }
                 };
 
@@ -86,7 +98,8 @@ namespace Shopping_Appilication.Controllers
                         ProductImage = product.ImageUrl,
                         ProductName = product.Name,
                         Description = product.Description,
-                        Price = product.Price
+                        Price = product.Price,
+                        MaHD = newMaHD
                     });
                 }
                 else
@@ -98,48 +111,89 @@ namespace Shopping_Appilication.Controllers
                 // Lưu giỏ hàng vào Session
                 SessionServices.SetObjToSession(HttpContext.Session, "Cart", cartItems);
             }
-
             // Chuyển hướng đến trang giỏ hàng
             return RedirectToAction("CartDetail");
-            ////Lấy đc dữ liệu sản mới
-            //var product = productServices.GetProductById(id);
-            ////lấy dữ liệu từ cart(trong Session)
-            //var products = SessionServices.GetObjFromSession(HttpContext.Session, "Cart");
-            ////Thêm list này vào ssesion
-            //List<Product> lstProduct = productServices.GetAllProducts();
-            //foreach (var product1 in lstProduct)
-            //{
-            //    string imageUrl = imageServices.GetImageUrl((Guid)product1.IdImage);
-            //    product1.ImageUrl = imageUrl;
-            //}
-            ////Kiểm tra xem List dl đó có phần tử chưa
-            //if (products.Count == 0)
-            //{
-            //    products.Add(product); // Nếu ko có sp nào thì add nó vào
-            //    //Sau đó gán lại giá trị vào trong Session
-            //    SessionServices.SetObjToSession(HttpContext.Session, "Cart", products);
-            //}
-            //else
-            //{
-            //    if (SessionServices.CheckObjInList(id, products))
-            //    {
-            //        return Content("List đã chứa sản phẩm này, bạn định ăn cắp ư");//thực hiện update thêm số lượng
-            //    }
-            //    else
-            //    {
-            //        products.Add(product); // Nếu chưa có sp đó 
-            //        //Sau đó gán lại giá trị vào trong Session
-            //        SessionServices.SetObjToSession(HttpContext.Session, "Cart", products);
-            //    }
-            //}
-            //return RedirectToAction("CartDetail");
         }
-        //public IActionResult GetCartBySsesion()
-        //{
-        //    Cart cart = HttpContext.Session.GetObject<Cart>("Cart");
-        //    return View(cart);
-        //}
+        [HttpPost]
+        public IActionResult RemoveCartItem(Guid id)
+        {
+            // Lấy thông tin giỏ hàng từ session
+            List<CartItem> cartItems = SessionServices.GetObjFromSession(HttpContext.Session, "Cart") as List<CartItem>;
 
+            // Tìm kiếm sản phẩm cần xóa
+            CartItem itemToRemove = cartItems.FirstOrDefault(item => item.ProductId == id);
+
+            // Nếu sản phẩm tồn tại trong giỏ hàng, thực hiện xóa
+            if (itemToRemove != null)
+            {
+                cartItems.Remove(itemToRemove);
+                // Lưu lại thông tin giỏ hàng mới vào session
+                SessionServices.SetObjToSession(HttpContext.Session, "Cart", cartItems);
+            }
+            // Chuyển hướng trở lại trang giỏ hàng
+            return RedirectToAction("CartDetail"); 
+        }
+        [HttpPost]
+        public IActionResult CheckoutOk(HoaDonViewModel viewModel)
+        {
+            // Kiểm tra xem giỏ hàng có sản phẩm nào hay không
+            var cartItems = SessionServices.GetObjFromSession(HttpContext.Session, "Cart") as List<CartItem>;
+            var user = new User
+            {
+                UserID = Guid.NewGuid(),
+                UserName = viewModel.HoTen,
+                DiaChi = viewModel.DiaChi,
+                SoDienThoai = viewModel.SoDienThoai,
+                Email = "",
+                Password = "",
+                RoleID = Guid.Parse("88dad5b0-513a-4404-c855-08db3450008e")
+            };
+            userServices.AddUser(user);
+
+            var allBills = billServices.GetAllBill();
+            if (allBills != null && allBills.Count > 0)
+            {
+                newMaHD = "HD0" + (allBills.Count + 1).ToString();
+            }
+            var bill = new Bill
+            {
+                Id = Guid.NewGuid(),
+                MaHD = newMaHD,
+                UserID = user.UserID,
+                CreateDate = DateTime.Now,
+                Status = viewModel.TrangThaiThanhToan,
+                ToTalPrice = viewModel.TongTien
+            };
+            _shopDBContext.Bills.Add(bill);
+            _shopDBContext.SaveChanges();
+            // Thêm sản phẩm vào bảng BillDetail và cập nhật số lượng sản phẩm
+            foreach (var item in cartItems)
+            {
+                var product = _shopDBContext.Products.Find(item.ProductId);
+                var billDetail = new BillDetail
+                {
+                    Id = Guid.NewGuid(),
+                    IdHD = bill.Id,
+                    IdSP = item.ProductId,
+                    Quantity = item.Quantity,
+                    Price = product.Price * item.Quantity,
+                };
+                _shopDBContext.BillDetails.Add(billDetail);
+                product.AvailableQuantity -= item.Quantity;
+                _shopDBContext.Products.Update(product);
+            }
+            SessionServices.SetObjToSession(HttpContext.Session, "Cart", cartItems);
+            _shopDBContext.SaveChanges();
+
+            // Xóa giỏ hàng và chuyển hướng sang trang cảm ơn
+            HttpContext.Session.Remove("Cart");
+            return Content("Thanh toan thanh cong");
+        }
+        public IActionResult ViewBill()
+        {
+            List<Bill> lstBills = billServices.GetAllBill();
+            return View(lstBills);
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

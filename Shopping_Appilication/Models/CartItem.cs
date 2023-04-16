@@ -9,6 +9,7 @@
         public string? Description { get; set; }
         public string Size { get; set; }
         public string? ProductImage { get; set; }
+        public string MaHD { get; set; }
 
     }
 }

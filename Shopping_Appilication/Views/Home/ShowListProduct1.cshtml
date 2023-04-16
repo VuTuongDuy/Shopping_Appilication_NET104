@@ -9,7 +9,10 @@
 }
 
 <h1>ShowListProduct1</h1>
-
+<form method="get" action="@Url.Action("SearchSP")">
+    <input id="timKiem" type="text" name="sanpham"/>
+    <button type="submit">Search</button>
+</form>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -54,13 +57,20 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+            <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
+            @if(item.Price * item.AvailableQuantity > 30000000){
+                 <td style="color:yellow;">
+                     @Html.DisplayFor(modelItem => item.Name)
+                 </td>
+            }
+            else{
+                 <td>
+                     @Html.DisplayFor(modelItem => item.Name)
+                 </td>
+            }
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
@@ -105,7 +115,6 @@
                 @Html.ActionLink("Edit", "Edit", new {  id=item.Id  }) |
                 @Html.ActionLink("Details", "Details", new {  id=item.Id  }) |
                 @Html.ActionLink("Delete", "Delete", new {  id=item.Id  })
-@*                @Html.ActionLink("RollbackProduct", "RollbackProduct", new {  id=item.Id  })*@
             </td>
         </tr>
 }

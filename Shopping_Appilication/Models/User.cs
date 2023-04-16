@@ -8,6 +8,8 @@
         public Guid? RoleID { get; set; }
         public string? Email { get; set; }
         public string? ResetPasswordToken { get; set; }
+        public string SoDienThoai { get; set; }
+        public string DiaChi { get; set; }
         public int Status { get; set; }
         public virtual Role Role { get; set; }
         public virtual Cart Cart { get; set; }

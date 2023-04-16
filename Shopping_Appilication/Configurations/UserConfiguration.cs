@@ -16,6 +16,10 @@ namespace Shopping_Appilication.Configurations
                IsRequired();
             builder.Property(c => c.Email).HasColumnType("nvarchar(200)").
                 IsRequired();
+            builder.Property(c => c.SoDienThoai).HasColumnType("nvarchar(30)").
+                IsRequired();
+            builder.Property(c => c.DiaChi).HasColumnType("nvarchar(500)").
+                IsRequired();
             builder.Property(c => c.ResetPasswordToken).HasColumnType("nvarchar(200)");
             builder.Property(c => c.Status).HasColumnType("int").
                IsRequired();
